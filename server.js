@@ -19,12 +19,19 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/timestamp", function (req, res) {
+  res.sendFile(__dirname + '/views/timestamp.html');
+});
 
-// your first API endpoint... 
+// first API endpoint
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// return IP address
+app.get("/api/whoami", function (req, res) {
+  res.json({ipaddress: 'return IP address'});
+});
 
 // date functions 
 let responseObject = {};
