@@ -5,6 +5,7 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 3000;
+// var ip = require("ip");
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -23,6 +24,10 @@ app.get("/timestamp", function (req, res) {
   res.sendFile(__dirname + '/views/timestamp.html');
 });
 
+app.get("/requestHeaderParser", function (req, res) {
+  res.sendFile(__dirname + '/views/requestHeaderParser.html');
+});
+
 // first API endpoint
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
@@ -30,7 +35,12 @@ app.get("/api/hello", function (req, res) {
 
 // return IP address
 app.get("/api/whoami", function (req, res) {
-  res.json({ipaddress: 'return IP address'});
+  res.json({
+    // "values" : req.headers,
+    "ipaddress" : req.ip, 
+    "language" : req.headers["accept-language"],
+    "software" : req.headers['user-agent']
+  });
 });
 
 // date functions 
