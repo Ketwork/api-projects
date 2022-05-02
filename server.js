@@ -28,6 +28,10 @@ app.get("/requestHeaderParser", function (req, res) {
   res.sendFile(__dirname + '/views/requestHeaderParser.html');
 });
 
+app.get("/urlShortener", function (req, res) {
+  res.sendFile(__dirname + '/views/urlShortener.html');
+});
+
 // first API endpoint
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
