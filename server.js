@@ -1,15 +1,22 @@
 // server.js
 // where your node app starts
 
+// database_uri = ""
+
+require('dotenv').config();
 // init project
 var express = require('express');
 var app = express();
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser')
 var port = process.env.PORT || 3000;
-// var ip = require("ip");
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
+const shortid = require('shortid');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
@@ -37,7 +44,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-// return IP address
+// Header Request
 app.get("/api/whoami", function (req, res) {
   res.json({
     // "values" : req.headers,
@@ -47,7 +54,40 @@ app.get("/api/whoami", function (req, res) {
   });
 });
 
-// date functions 
+// URL SHORTENING SERVICE
+
+// Build a schema and model to store saved URLS
+// const ShortUrl = mongoose.model('ShortUrl', new Schema({
+//   shortUrl: String,
+//   original_url: String,
+//   suffix: String
+// }));
+// create application/json parser
+app.use(bodyParser.urlencoded({ extended: "false" }));
+app.use(bodyParser.json());
+var jsonParser = bodyParser.json()
+
+app.post("/api/shorturl", function (req, res) {
+  console.log(process.env.SECRET_KEY);
+  console.log(database_uri);
+  let client_requested_url = req.body.url
+  let suffix = shortid.generate()
+  console.log(suffix, " <= this will be our suffix")
+
+  // let newURL = new ShortUrl({
+  //   shortUrl: __dirname + "/api/shorturl/" + suffix,
+  //   original_url: client_requested_url,
+  //   suffix: suffix
+  // })
+
+  res.json({
+    "short url": 'here we need a shortened URL',
+    "original_URL": client_requested_url
+  });
+});
+
+
+// Date Functions 
 let responseObject = {};
 
 // if api url is blank returns current date/time
