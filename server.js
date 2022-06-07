@@ -56,6 +56,7 @@ app.get("/api/whoami", function (req, res) {
 });
 
 
+// <--- URL Shortener Microservice --->
 
 /* Create URL Model */
 let urlSchema = new mongoose.Schema({
@@ -68,6 +69,15 @@ let Url = mongoose.model("Url", urlSchema);
 // let responseObject = {};
 app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }) , (request, response) => {
     let inputUrl = request.body['url']
+
+    // regular expression to match valid URLs
+    let urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
+    
+    // if URL doesn't match regex send error response and return here to stop rest of function
+    if (!inputUrl.match(urlRegex)) {
+      response.json({error: "invalid url"});
+      return
+    }
   
     responseObject["original_url"] = inputUrl;
 
@@ -99,59 +109,27 @@ app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }) , (request,
       });
   });
 
-// URL SHORTENING SERVICE
 
-// Build a schema and model to store saved URLS
-// const ShortURL = mongoose.model('ShortUrl', mongoose.Schema({
-//   short_url: String,
-//   original_url: String,
-//   suffix: String
-// }));
-// // create application/json parser
-// app.use(bodyParser.urlencoded({ extended: "false" }));
-// app.use(bodyParser.json());
-// var jsonParser = bodyParser.json()
+// <--- /URL Shortener Microservice END --->
 
-// app.post("/api/shorturl", function (req, res) {
-//   let client_requested_url = req.body.url
-//   let suffix = shortid.generate()
-//   let newShortURL = suffix
+// app.get("/api/shorturl/:suffix", function(req, res) {
+//   let userGeneratedSuffix = req.params.suffix;
+//   // ShortURL.find({suffix: userGeneratedSuffix}).then(function(foundUrls) {
+//   //   let urlForRedirect = foundUrls[0].original_url
+//   //   console.log(urlForRedirect, "<= url for redirect")
+//   //   // express redirect
+//   //   res.redirect(urlForRedirect)
+//   // });
 
-//   let newURL = new ShortURL({
-//     short_url: __dirname + "/api/shorturl/" + suffix,
-//     original_url: client_requested_url,
-//     suffix: suffix
+//   ShortURL.findOne({suffix: userGeneratedSuffix}, (error, result) => {
+//     if (!error && result != undefined){
+//       console.log(result);
+//       response.redirect(result.original_url)
+//     } else {
+//       response.json('URL not Found')
+//     }
 //   })
-
-//   newURL.save(function(err, doc) {
-//     if (err) return console.error(err);
-//     res.json({
-//       "saved": true,
-//       "short_url": newURL.short_url,
-//       "original_URL": newURL.original_url,
-//       "suffix": newURL.suffix
-//     });
-//   });
 // });
-
-app.get("/api/shorturl/:suffix", function(req, res) {
-  let userGeneratedSuffix = req.params.suffix;
-  // ShortURL.find({suffix: userGeneratedSuffix}).then(function(foundUrls) {
-  //   let urlForRedirect = foundUrls[0].original_url
-  //   console.log(urlForRedirect, "<= url for redirect")
-  //   // express redirect
-  //   res.redirect(urlForRedirect)
-  // });
-
-  ShortURL.findOne({suffix: userGeneratedSuffix}, (error, result) => {
-    if (!error && result != undefined){
-      console.log(result);
-      response.redirect(result.original_url)
-    } else {
-      response.json('URL not Found')
-    }
-  })
-});
 
 
 // Date Functions 
