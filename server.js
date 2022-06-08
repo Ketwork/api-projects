@@ -1,5 +1,4 @@
 // server.js
-// where your node app starts
 
 // database_uri = ""
 
@@ -66,7 +65,7 @@ let urlSchema = new mongoose.Schema({
 
 let Url = mongoose.model("Url", urlSchema);
 
-// let responseObject = {};
+// URL entered will be assigned a short URL and stored in database
 app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }) , (request, response) => {
     let inputUrl = request.body['url']
 
@@ -109,27 +108,19 @@ app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }) , (request,
       });
   });
 
-
+// when short URL is entered on the end of the URL route it will redirect to stored address.
+app.get("/api/shorturl/:input", (request, response) => {
+  let input = request.params.input
+  
+  Url.findOne({short:input}, (error, result) => {
+    if (!error && result != undefined) {
+      response.redirect(result.original)
+    } else {
+      response.json('URL not found')
+    }
+  })
+})
 // <--- /URL Shortener Microservice END --->
-
-// app.get("/api/shorturl/:suffix", function(req, res) {
-//   let userGeneratedSuffix = req.params.suffix;
-//   // ShortURL.find({suffix: userGeneratedSuffix}).then(function(foundUrls) {
-//   //   let urlForRedirect = foundUrls[0].original_url
-//   //   console.log(urlForRedirect, "<= url for redirect")
-//   //   // express redirect
-//   //   res.redirect(urlForRedirect)
-//   // });
-
-//   ShortURL.findOne({suffix: userGeneratedSuffix}, (error, result) => {
-//     if (!error && result != undefined){
-//       console.log(result);
-//       response.redirect(result.original_url)
-//     } else {
-//       response.json('URL not Found')
-//     }
-//   })
-// });
 
 
 // Date Functions 
