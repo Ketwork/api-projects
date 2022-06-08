@@ -1,0 +1,16 @@
+body {
+  color: antiquewhite;
+  background-color: #2e3436;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+#url_input {
+  width: 65%;
+}
+
+input {
+  color: #2e3436;
+}

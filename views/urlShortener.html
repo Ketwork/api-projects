@@ -2,6 +2,7 @@
   <head>
     <title>URL Shortener Microservice</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="url.css" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -11,9 +12,9 @@
         <form action="api/shorturl" method="POST">
           <fieldset>
             <legend>URL Shortener</legend>
-            <label for="url_input">URL:</label>
-            <input id="url_input" type="text" name="url" placeholder="https://www.freecodecamp.org/" />
-            <input type="submit" value="POST URL" />
+            <label for="url_input">Enter URL:</label>
+            <input id="url_input" type="text" name="url" value="https://ketwork.github.io/profile/" />
+            <input type="submit" value="SHORTEN" />
           </fieldset>
         </form>
       </section>
