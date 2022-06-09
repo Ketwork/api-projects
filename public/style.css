@@ -4,7 +4,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	color: #222;
-	background-color: #FaFaFa;
+	background-color: #f2f3f4;
 	text-align: center;
 	line-height: 1.4em;
 }
@@ -43,6 +43,20 @@ li {
 
 a {
 	color: #2574A9;
+}
+
+.name {
+  text-align: right;
+  margin-right: 16px;
+}
+
+.name a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+}
+
+blockquote {
+  text-align: left;
 }
 
 /* URL Shortener Microservice */
