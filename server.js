@@ -39,6 +39,10 @@ app.get("/urlShortener", function (req, res) {
   res.sendFile(__dirname + '/views/urlShortener.html');
 });
 
+app.get("/exercise-tracker", function (req, res) {
+  res.sendFile(__dirname + '/views/exercise-tracker.html');
+});
+
 // first API endpoint
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
@@ -123,7 +127,23 @@ app.get("/api/shorturl/:input", (request, response) => {
 // <--- /URL Shortener Microservice END --->
 
 
-// Date Functions 
+// <--- Exercise Tracker --->
+// let exerciseSchema = new mongoose.Schema({
+//   _id: { type: String, required: true },
+//   username: { type: String, required: true },
+// });
+
+// let ExerciseUser = mongoose.model("ExcerciseUser", exerciseSchema);
+
+app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (req, res) => {
+  console.log("accessing post request");
+  res.json({
+    "userInput": req.body
+  })
+})// <--- Exercise Tracker END --->
+
+
+// <--- Date Functions ---> 
 let responseObject = {};
 
 // if api url is blank returns current date/time
@@ -152,6 +172,7 @@ app.get("/api/:date?", function (req, res) {
   
   res.json(responseObject);
 });
+// <--- /Date functions END --->
 
 
 // listen for requests :)
