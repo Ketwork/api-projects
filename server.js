@@ -128,18 +128,36 @@ app.get("/api/shorturl/:input", (request, response) => {
 
 
 // <--- Exercise Tracker --->
-// let exerciseSchema = new mongoose.Schema({
-//   _id: { type: String, required: true },
-//   username: { type: String, required: true },
-// });
+let exerciseSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
+  username: { type: String, required: true },
+});
 
-// let ExerciseUser = mongoose.model("ExcerciseUser", exerciseSchema);
+let ExerciseUser = mongoose.model("ExcerciseUser", exerciseSchema);
 
 app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (req, res) => {
   console.log("accessing post request");
-  res.json({
-    "userInput": req.body
+
+  let mongooseGenerateID = mongoose.Types.ObjectId();
+  console.log(mongooseGenerateID, "<= mongooseGenerateID");
+  let exerciseUser = new ExerciseUser({
+    username: req.body.username,
+    _id: mongooseGenerateID
+  });
+  console.log(exerciseUser, " <= exerciseUser");
+
+  exerciseUser.save((err, doc) => {
+    if (err) return console.error(err);
+    console.log("About to save exercise user");
+    res.json({
+      "saved": true,
+      "username": req.body,
+      "_id": exerciseUser["_id"]
+    })
   })
+  // res.json({
+  //   "userInput": req.body
+  // })
 })// <--- Exercise Tracker END --->
 
 
