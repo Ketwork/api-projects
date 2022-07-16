@@ -130,6 +130,7 @@ app.get("/api/shorturl/:input", (request, response) => {
 // <--- Exercise Tracker --->
 let exerciseSchema = new mongoose.Schema({
   _id: { type: String},
+  // unique username currently not working
   username: { type: String, unique: true, required: true },
 });
 
@@ -155,7 +156,7 @@ app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (req, res) =
 
 app.get("/api/users", (req, res) => {
   ExerciseUser.find({}, (err, exerciseUsers) => {
-    res.json({ users: exerciseUsers})
+    res.json(exerciseUsers)
 
   });
 })
