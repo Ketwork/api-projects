@@ -128,38 +128,106 @@ app.get("/api/shorturl/:input", (request, response) => {
 
 
 // <--- Exercise Tracker --->
-let exerciseSchema = new mongoose.Schema({
-  _id: { type: String},
-  // unique username currently not working
-  username: { type: String, unique: true, required: true },
+// let exerciseSchema = new mongoose.Schema({
+//   _id: { type: String},
+//   // unique username currently not working
+//   username: { type: String, unique: true, required: true },
+// });
+
+let exerciseSessionSchema = new mongoose.Schema({
+  description: {type: String, required: true},
+  duration: {type: Number, required: true},
+  date: String
 });
 
-let ExerciseUser = mongoose.model("ExerciseUser", exerciseSchema);
+let userSchema = new mongoose.Schema({
+  username: {type: String, required: true},
+  log: [exerciseSessionSchema]
+})
 
-app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (req, res) => {
+// models
+let Session = mongoose.model('Session', exerciseSessionSchema)
+let User = mongoose.model('User', userSchema)
+// let ExerciseUser = mongoose.model("ExerciseUser", exerciseSchema);
 
-  let mongooseGenerateID = mongoose.Types.ObjectId();
-  let exerciseUser = new ExerciseUser({
-    username: req.body.username,
-    _id: mongooseGenerateID
-  });
-
-  exerciseUser.save((err, doc) => {
-    if (err) return console.error(err);
-    res.json({
-      "saved": true,
-      "username": req.body,
-      "_id": exerciseUser["_id"]
-    })
+app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (request, response) => {
+  // mongoose generates id for us
+  let newUser = new User({username: request.body.username})
+  // save to database
+  newUser.save((error, savedUser) => {
+    if(!error){
+      let responseObject = {}
+      responseObject['username'] = savedUser.username
+      responseObject['_id'] = savedUser.id
+      response.json(responseObject)
+    }
   })
+
+  // let mongooseGenerateID = mongoose.Types.ObjectId();
+  // let exerciseUser = new ExerciseUser({
+  //   username: req.body.username,
+  //   _id: mongooseGenerateID
+  // });
+
+  // exerciseUser.save((err, doc) => {
+  //   if (err) return console.error(err);
+  //   res.json({
+  //     "saved": true,
+  //     "username": req.body,
+  //     "_id": exerciseUser["_id"]
+  //   })
+  // })
+
 })
 
+// Show All Users
 app.get("/api/users", (req, res) => {
-  ExerciseUser.find({}, (err, exerciseUsers) => {
-    res.json(exerciseUsers)
 
+  User.find({}, (error, arrayOfUsers) => {
+    if(!error) {
+      res.json(arrayOfUsers)
+    }
   });
 })
+
+// Add Exercises
+app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false }), (request, response) => {
+
+  let newSession = new Session({
+    description: request.body.description,
+    duration: parseInt(request.body.duration),
+    date: request.body.date
+  })
+
+  // if no date is input 
+  if(newSession.date == "") {
+    newSession.date = new Date().toISOString().substring(0,10)
+  }
+
+  User.findByIdAndUpdate(
+    // params takes the date in the url
+    request.params._id,
+    {$push : {log: newSession}},
+    {new: true},  
+    (error, updatedUser) => {
+      let responseObject = {}
+      responseObject['_id'] = updatedUser.id
+      responseObject['username'] = updatedUser.username
+      responseObject['description'] = newSession.description
+      responseObject['duration'] = newSession.duration
+      responseObject['date'] = new Date(newSession.date).toDateString()
+      response.json(responseObject)
+    }
+  )
+})
+
+// app.get("/api/users", (req, res) => {
+//   ExerciseUser.find({}, (err, exerciseUsers) => {
+//     res.json(exerciseUsers)
+//   });
+// })
+
+
 // <--- /Exercise Tracker END --->
 
 // <--- Date Functions ---> 
