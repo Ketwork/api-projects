@@ -128,11 +128,6 @@ app.get("/api/shorturl/:input", (request, response) => {
 
 
 // <--- Exercise Tracker --->
-// let exerciseSchema = new mongoose.Schema({
-//   _id: { type: String},
-//   // unique username currently not working
-//   username: { type: String, unique: true, required: true },
-// });
 
 let exerciseSessionSchema = new mongoose.Schema({
   description: {type: String, required: true},
@@ -148,7 +143,6 @@ let userSchema = new mongoose.Schema({
 // models
 let Session = mongoose.model('Session', exerciseSessionSchema)
 let User = mongoose.model('User', userSchema)
-// let ExerciseUser = mongoose.model("ExerciseUser", exerciseSchema);
 
 app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (request, response) => {
   // mongoose generates id for us
@@ -162,22 +156,6 @@ app.post('/api/users', bodyParser.urlencoded({ extended: false }) , (request, re
       response.json(responseObject)
     }
   })
-
-  // let mongooseGenerateID = mongoose.Types.ObjectId();
-  // let exerciseUser = new ExerciseUser({
-  //   username: req.body.username,
-  //   _id: mongooseGenerateID
-  // });
-
-  // exerciseUser.save((err, doc) => {
-  //   if (err) return console.error(err);
-  //   res.json({
-  //     "saved": true,
-  //     "username": req.body,
-  //     "_id": exerciseUser["_id"]
-  //   })
-  // })
-
 })
 
 // Show All Users
@@ -201,7 +179,7 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
 
   // if no date is input 
   if(newSession.date == "") {
-    newSession.date = new Date().toISOString().substring(0,10)
+    newSession.date = new Date().toISOString().substring(0,10) // creates date only without the time
   }
 
   User.findByIdAndUpdate(
@@ -220,12 +198,6 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
     }
   )
 })
-
-// app.get("/api/users", (req, res) => {
-//   ExerciseUser.find({}, (err, exerciseUsers) => {
-//     res.json(exerciseUsers)
-//   });
-// })
 
 
 // <--- /Exercise Tracker END --->
