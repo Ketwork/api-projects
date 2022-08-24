@@ -203,7 +203,13 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
 app.get("/api/users/:_id/logs", (request, response) => {
   User.findById(request.params._id, (error, userLog) => {
     if(!error) {
-      response.json(userLog);
+      console.log(userLog.log.length)
+      let responseObject = {}
+      responseObject['_id'] = userLog.id
+      responseObject['username'] = userLog.username
+      responseObject['count'] = userLog.log.length
+      responseObject['log'] = userLog.log
+      response.json(responseObject);
     }
   })
 })
