@@ -166,7 +166,7 @@ app.get("/api/users", (req, res) => {
       res.json(arrayOfUsers)
     }
   });
-})
+});
 
 // Add Exercises
 app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false }), (request, response) => {
@@ -197,6 +197,15 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
       response.json(responseObject)
     }
   )
+})
+
+// Retrieve Exercise Log
+app.get("/api/users/:_id/logs", (request, response) => {
+  User.findById(request.params._id, (error, userLog) => {
+    if(!error) {
+      response.json(userLog);
+    }
+  })
 })
 
 
