@@ -203,13 +203,15 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
 app.get("/api/users/:_id/logs", (request, response) => {
   User.findById(request.params._id, (error, userLog) => {
     if(!error) {
-      console.log(userLog.log.length)
+      // console.log(userLog)
       let responseObject = userLog
-      responseObject = responseObject.toJSON()
-      // responseObject['_id'] = userLog.id
-      // responseObject['username'] = userLog.username
+
+      if(request.query.limit){
+        responseObject.log = responseObject.log.slice(0, request.query.limit)
+      }
+      
+      responseObject = responseObject.toJSON() // this makes the responseObject modifiable so that count can be added. 
       responseObject['count'] = userLog.log.length
-      // responseObject['log'] = userLog.log
       response.json(responseObject);
     }
   })
