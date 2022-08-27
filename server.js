@@ -178,7 +178,7 @@ app.post('/api/users/:_id/exercises', bodyParser.urlencoded({ extended: false })
   })
 
   // if no date is input 
-  if(newSession.date == "") {
+  if(newSession.date == "" || newSession.date == undefined) {
     newSession.date = new Date().toISOString().substring(0,10) // creates date only without the time
   }
 
