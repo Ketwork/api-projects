@@ -206,10 +206,40 @@ app.get("/api/users/:_id/logs", (request, response) => {
       // console.log(userLog)
       let responseObject = userLog
 
+      // filter down results with dates 
+      if(request.query.from || request.query.to){
+
+        // set default dates
+        let fromDate = new Date(0)
+        let toDate = new Date()
+
+        // if there is a from date in url
+        if(request.query.from){
+          fromDate = new Date(request.query.from)
+        }
+
+        // if there is a to date in url
+        if(request.query.to){
+          toDate = new Date(request.query.to)
+        }
+
+        // convert to unix time stamps
+        fromDate = fromDate.getTime()
+        toDate = toDate.getTime()
+
+        responseObject.log = responseObject.log.filter((session) => {
+          let sessionDate = new Date(session.date).getTime()
+
+          // returns true if fromDate is before toDate
+          return sessionDate >= fromDate && sessionDate <= toDate
+        })
+        console.log(typeof fromDate)
+      }
+      // filter down results to how many logs specified in the url (e.g. ?limit=2)
       if(request.query.limit){
         responseObject.log = responseObject.log.slice(0, request.query.limit)
       }
-      
+
       responseObject = responseObject.toJSON() // this makes the responseObject modifiable so that count can be added. 
       responseObject['count'] = userLog.log.length
       response.json(responseObject);
