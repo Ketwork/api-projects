@@ -233,7 +233,6 @@ app.get("/api/users/:_id/logs", (request, response) => {
           // returns true if fromDate is before toDate
           return sessionDate >= fromDate && sessionDate <= toDate
         })
-        console.log(typeof fromDate)
       }
       // filter down results to how many logs specified in the url (e.g. ?limit=2)
       if(request.query.limit){
@@ -242,6 +241,7 @@ app.get("/api/users/:_id/logs", (request, response) => {
 
       responseObject = responseObject.toJSON() // this makes the responseObject modifiable so that count can be added. 
       responseObject['count'] = userLog.log.length
+      // console.log(typeof responseObject.log[0].date)
       response.json(responseObject);
     }
   })
