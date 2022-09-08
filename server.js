@@ -132,7 +132,7 @@ app.get("/api/shorturl/:input", (request, response) => {
 let exerciseSessionSchema = new mongoose.Schema({
   description: {type: String, required: true},
   duration: {type: Number, required: true},
-  date: String
+  date: { type: String, default: new Date().toDateString() }
 });
 
 let userSchema = new mongoose.Schema({
