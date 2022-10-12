@@ -43,6 +43,10 @@ app.get("/exercise-tracker", function (req, res) {
   res.sendFile(__dirname + '/views/exercise-tracker.html');
 });
 
+app.get("/file-metadata", function (req, res) {
+  res.sendFile(__dirname + '/views/file-metadata.html');
+});
+
 // first API endpoint
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
@@ -286,3 +290,15 @@ app.get("/api/:date?", function (req, res) {
 var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+let multer = require('multer');
+
+app.post('/api/fileanalyse', multer().single('upfile'), (request, response) => {
+  console.log(request.file)
+  responseObject = {};
+  responseObject['name'] = request.file.originalname;
+  responseObject['type'] = request.file.mimetype;
+  responseObject['size'] = request.file.size;
+  
+  response.json(responseObject);
+})
