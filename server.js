@@ -293,7 +293,8 @@ var listener = app.listen(port, function () {
 
 let multer = require('multer');
 
-app.post('/api/fileanalyse', multer().single('upfile'), (request, response) => {
+// /file-metadata <- add to url to pass test
+app.post('/file-metadata/api/fileanalyse', multer().single('upfile'), (request, response) => {
   console.log(request.file)
   responseObject = {};
   responseObject['name'] = request.file.originalname;
