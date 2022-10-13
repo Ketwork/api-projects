@@ -291,10 +291,13 @@ var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
+
+// <--- File-Metadata Functions ---> 
+
 let multer = require('multer');
 
-// /file-metadata <- add to url to pass test
-app.post('/file-metadata/api/fileanalyse', multer().single('upfile'), (request, response) => {
+// /file-metadata/api/fileanalyse <- add to url to pass test
+app.post('/api/fileanalyse', multer().single('upfile'), (request, response) => {
   console.log(request.file)
   responseObject = {};
   responseObject['name'] = request.file.originalname;
@@ -303,3 +306,5 @@ app.post('/file-metadata/api/fileanalyse', multer().single('upfile'), (request, 
   
   response.json(responseObject);
 })
+
+// <--- / File-Metadata END ---> 
