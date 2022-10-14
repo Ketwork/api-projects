@@ -297,7 +297,6 @@ let multer = require('multer');
 
 // /file-metadata/api/fileanalyse <- add to url to pass test. (Also change HTML form action name)
 app.post('/api/fileanalyse', multer().single('upfile'), (request, response) => {
-  // responseObject = {};
   responseObject['name'] = request.file.originalname;
   responseObject['type'] = request.file.mimetype;
   responseObject['size'] = request.file.size;
